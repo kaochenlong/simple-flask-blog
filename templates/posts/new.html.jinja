@@ -1,0 +1,18 @@
+{% extends "layout.html.jinja" %}
+
+{% block content %}
+  <h1 class="text-2xl mb-2">新增文章</h1>
+  <form action="/posts/create" method="POST" class="flex flex-col gap-4">
+    <div class="flex flex-col gap-2">
+      <label for="title">標題</label>
+      <input type="text" id="title" name="title" class="text-xl w-full md:w-1/2 p-2 border border-gray-900 rounded-sm" placeholder="請填寫標題" />
+    </div>
+    <div class="flex flex-col gap-2">
+      <label for="content">內文</label>
+      <textarea id="content" name="content" class="text-xl w-full md:w-1/2 p-2 border border-gray-900 rounded-sm" placeholder="文章內容" rows="6"></textarea>
+    </div>
+    <div>
+      <button type="submit" class="text-lg bg-blue-500 text-white p-2 rounded-sm">新增文章</button>
+    </div>
+  </form>
+{% endblock %}

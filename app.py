@@ -7,5 +7,9 @@ app = Flask(__name__)
 def index():
     return render_template("posts/index.html.jinja")
 
+@app.route("/posts/new")
+def new():
+    return render_template("posts/new.html.jinja")
+
 if __name__ == "__main__":
     app.run(port=9527, debug=True)
