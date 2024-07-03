@@ -14,3 +14,6 @@ class Post(db.Model):
     updated_at = mapped_column(
         DateTime, server_default=func.now(), server_onupdate=func.now()
     )
+
+    def __repr__(self):
+        return f"{self.title}"

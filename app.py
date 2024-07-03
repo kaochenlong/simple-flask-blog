@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for
+from flask import Flask, render_template, redirect, url_for, request
 import os
 from config.settings import db
 from flask_migrate import Migrate
@@ -20,7 +20,13 @@ def new():
 
 @app.route("/posts/create", methods=["POST"])
 def create():
-    # 寫入資料庫，待會做...
+    title = request.form.get("title")
+    content = request.form.get("content")
+
+    post = models.Post(title=title, content=content)
+    db.session.add(post)
+    db.session.commit()
+
     return redirect(url_for("index"))
 
 
