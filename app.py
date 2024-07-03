@@ -1,9 +1,11 @@
-from flask import Flask, render_template, redirect, url_for, request
+from flask import Flask, render_template, redirect, url_for, request, flash
 import os
 from config.settings import db
 from flask_migrate import Migrate
 import models
+from dotenv import load_dotenv
 
+load_dotenv()
 app = Flask(__name__)
 
 
@@ -27,11 +29,14 @@ def create():
     db.session.add(post)
     db.session.commit()
 
+    flash("新增文章成功！")
+
     return redirect(url_for("index"))
 
 
 ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
 app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{ROOT_PATH}/db/blog.sqlite"
+app.secret_key = os.getenv("APP_SECRET_KEY")
 db.init_app(app)
 Migrate(app, db)
 

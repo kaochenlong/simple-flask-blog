@@ -8,6 +8,7 @@
   </head>
   <body class="bg-gray-50">
     <main class="container bg-white rounded shadow my-4 mx-auto p-12">
+      {% include "shared/flash.html.jinja" %}
       {% include "shared/navbar.html.jinja" %}
       {% block content %}{% endblock %}
     </main>
