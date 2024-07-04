@@ -2,7 +2,7 @@ from flask import Flask, render_template, redirect, url_for, request, flash
 import os
 from config.settings import db
 from flask_migrate import Migrate
-import models
+from models import Post
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -12,7 +12,8 @@ app = Flask(__name__)
 @app.route("/")
 @app.route("/posts")
 def index():
-    return render_template("posts/index.html.jinja")
+    posts = Post.query.order_by(-Post.id).all()
+    return render_template("posts/index.html.jinja", posts=posts)
 
 
 @app.route("/posts/new")
@@ -25,7 +26,7 @@ def create():
     title = request.form.get("title")
     content = request.form.get("content")
 
-    post = models.Post(title=title, content=content)
+    post = Post(title=title, content=content)
     db.session.add(post)
     db.session.commit()
 
