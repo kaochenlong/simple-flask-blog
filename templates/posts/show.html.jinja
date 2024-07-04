@@ -9,4 +9,8 @@
     </time>
     <p class="bg-gray-50 px-4 py-2">{{ post.content }}</p>
   </article>
+  <footer class="my-1">
+    <a href="{{ url_for('edit', id=post.id) }}"
+       class="inline-block bg-green-400 px-2 py-1 text-white">編輯</a>
+  </footer>
 {% endblock %}

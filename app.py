@@ -41,6 +41,25 @@ def create():
     return redirect(url_for("index"))
 
 
+@app.route("/posts/<int:id>/edit")
+def edit(id):
+    post = Post.query.get_or_404(id)
+    return render_template("posts/edit.html.jinja", post=post)
+
+
+@app.route("/posts/<int:id>/update", methods=["POST"])
+def update(id):
+    post = Post.query.get_or_404(id)
+
+    post.title = request.form.get("title")
+    post.content = request.form.get("content")
+
+    db.session.commit()
+
+    flash("文章更新成功！")
+    return redirect(url_for("show", id=id))
+
+
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template("errors/404.html.jinja"), 404
