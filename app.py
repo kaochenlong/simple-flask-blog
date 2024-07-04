@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, request, flash
+from flask import Flask, render_template, redirect, url_for, request, flash, abort
 import os
 from config.settings import db
 from flask_migrate import Migrate
@@ -14,6 +14,12 @@ app = Flask(__name__)
 def index():
     posts = Post.query.order_by(-Post.id).all()
     return render_template("posts/index.html.jinja", posts=posts)
+
+
+@app.route("/posts/<int:id>")
+def show(id):
+    post = Post.query.get_or_404(id)
+    return render_template("posts/show.html.jinja", post=post)
 
 
 @app.route("/posts/new")
@@ -33,6 +39,11 @@ def create():
     flash("新增文章成功！")
 
     return redirect(url_for("index"))
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template("errors/404.html.jinja"), 404
 
 
 ROOT_PATH = os.path.dirname(os.path.abspath(__file__))

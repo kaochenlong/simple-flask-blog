@@ -7,7 +7,9 @@
     {% for post in posts %}
     <div>
       <header class="my-1">
-        <h2 class="text-lg font-bold">{{ post.title }}</h2>
+        <h2 class="text-lg font-bold">
+          <a href="{{ url_for("show", id=post.id) }}">{{ post.title }}</a>
+        </h2>
       </header>
       <article class="bg-slate-50 p-2 flex flex-col gap-2">
         <time datetime="{{ post.created_at.isoformat() }}"
