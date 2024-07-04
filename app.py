@@ -60,6 +60,17 @@ def update(id):
     return redirect(url_for("show", id=id))
 
 
+@app.route("/posts/<int:id>/delete", methods=["POST"])
+def delete(id):
+    post = Post.query.get_or_404(id)
+
+    db.session.delete(post)
+    db.session.commit()
+
+    flash("文章已刪除")
+    return redirect(url_for("index"))
+
+
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template("errors/404.html.jinja"), 404
