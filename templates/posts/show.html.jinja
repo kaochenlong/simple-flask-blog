@@ -10,7 +10,7 @@
     <p class="bg-gray-50 px-4 py-2">{{ post.content }}</p>
   </article>
   <footer class="my-1 flex gap-2">
-    <a href="{{ url_for('edit', id=post.id) }}"
+    <a href="{{ url_for('post.edit', id=post.id) }}"
        class="select-none bg-green-400 px-2 py-1 text-white">編輯</a>
 
     <form action="/posts/{{ post.id }}/delete" method="POST" onsubmit="return confirm('確認刪除？')">
