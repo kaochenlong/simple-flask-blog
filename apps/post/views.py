@@ -6,24 +6,23 @@ post_bp = Blueprint("post", __name__)
 
 
 @post_bp.route("/")
-@post_bp.route("/posts")
 def index():
     posts = Post.query.order_by(-Post.id).all()
     return render_template("posts/index.html.jinja", posts=posts)
 
 
-@post_bp.route("/posts/<int:id>")
+@post_bp.route("/<int:id>")
 def show(id):
     post = Post.query.get_or_404(id)
     return render_template("posts/show.html.jinja", post=post)
 
 
-@post_bp.route("/posts/new")
+@post_bp.route("/new")
 def new():
     return render_template("posts/new.html.jinja")
 
 
-@post_bp.route("/posts/create", methods=["POST"])
+@post_bp.route("/create", methods=["POST"])
 def create():
     title = request.form.get("title")
     content = request.form.get("content")
@@ -37,13 +36,13 @@ def create():
     return redirect(url_for("post.index"))
 
 
-@post_bp.route("/posts/<int:id>/edit")
+@post_bp.route("/<int:id>/edit")
 def edit(id):
     post = Post.query.get_or_404(id)
     return render_template("posts/edit.html.jinja", post=post)
 
 
-@post_bp.route("/posts/<int:id>/update", methods=["POST"])
+@post_bp.route("/<int:id>/update", methods=["POST"])
 def update(id):
     post = Post.query.get_or_404(id)
 
@@ -56,7 +55,7 @@ def update(id):
     return redirect(url_for("post.show", id=id))
 
 
-@post_bp.route("/posts/<int:id>/delete", methods=["POST"])
+@post_bp.route("/<int:id>/delete", methods=["POST"])
 def delete(id):
     post = Post.query.get_or_404(id)
 

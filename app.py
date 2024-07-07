@@ -3,13 +3,16 @@ from flask import Flask
 from config.settings import db
 from flask_migrate import Migrate
 from dotenv import load_dotenv
-from apps.post.views import post_bp
+from apps.post.views import post_bp, index as root_view
+from apps.user.views import user_bp
 from apps.error.handlers import error_bp
 
 load_dotenv()
 
 app = Flask(__name__)
-app.register_blueprint(post_bp)
+app.add_url_rule("/", view_func=root_view, endpoint="root")
+app.register_blueprint(post_bp, url_prefix="/posts")
+app.register_blueprint(user_bp, url_prefix="/users")
 app.register_blueprint(error_bp)
 
 ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
