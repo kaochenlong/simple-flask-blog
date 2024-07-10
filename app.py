@@ -1,23 +1,15 @@
-import os
-from flask import Flask
 from config.settings import db
 from flask_migrate import Migrate
-from dotenv import load_dotenv
 from apps.post.views import post_bp, index as root_view
 from apps.user.views import user_bp
 from apps.error.handlers import error_bp
+from apps import app
 
-load_dotenv()
-
-app = Flask(__name__)
 app.add_url_rule("/", view_func=root_view, endpoint="root")
 app.register_blueprint(post_bp, url_prefix="/posts")
 app.register_blueprint(user_bp, url_prefix="/users")
 app.register_blueprint(error_bp)
 
-ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
-app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{ROOT_PATH}/db/blog.sqlite"
-app.secret_key = os.getenv("APP_SECRET_KEY")
 db.init_app(app)
 Migrate(app, db)
 
