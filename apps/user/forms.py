@@ -11,7 +11,20 @@ def unique_username(form, field):
         raise ValidationError("該帳號已被申請")
 
 
-class UserRegisterForm(Form):
+class UserLoginForm(Form):
+    username = StringField(
+        "帳號",
+        validators=[InputRequired(), Length(min=4)],
+        render_kw={"placeholder": "使用者帳號", "class": STYLES},
+    )
+    password = PasswordField(
+        "密碼",
+        validators=[InputRequired()],
+        render_kw={"placeholder": "登入密碼", "class": STYLES},
+    )
+
+
+class UserRegisterForm(UserLoginForm):
     username = StringField(
         "帳號",
         validators=[InputRequired(), Length(min=4), unique_username],

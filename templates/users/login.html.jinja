@@ -1,0 +1,13 @@
+{% extends "layout.html.jinja" %}
+{% from "helpers/form_field.html.jinja" import render_field %}
+
+{% block content %}
+  <h1 class="text-2xl mb-2">會員登入</h1>
+  <form action="{{ url_for('user.login') }}" method="POST" class="flex flex-col gap-4">
+    {{ render_field(form.username) }}
+    {{ render_field(form.password) }}
+    <div>
+      <button type="submit" class="text-lg bg-blue-500 text-white p-2 rounded-sm">登入</button>
+    </div>
+  </form>
+{% endblock %}

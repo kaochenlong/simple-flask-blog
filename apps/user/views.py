@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, flash, url_for
-from .forms import UserRegisterForm
+from .forms import UserRegisterForm, UserLoginForm
 from models.user import User
 from config.settings import db
 from flask_bcrypt import Bcrypt
@@ -13,6 +13,19 @@ bcrypt = Bcrypt(app)
 def new():
     form = UserRegisterForm()
     return render_template("users/new.html.jinja", form=form)
+
+
+@user_bp.route("/login", methods=["GET", "POST"])
+def login():
+    form = UserLoginForm(request.form)
+    if request.method == "POST" and form.validate():
+        user = User.query.filter_by(username=form.username.data).first()
+        if user and bcrypt.check_password_hash(user.password, form.password.data):
+            flash("登入成功")
+            return redirect(url_for("root"))
+        else:
+            flash("登入失敗，請確認後再重試一次")
+    return render_template("users/login.html.jinja", form=form)
 
 
 @user_bp.route("/create", methods=["POST"])
