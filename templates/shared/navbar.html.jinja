@@ -6,7 +6,11 @@
   <ul class="flex gap-4">
     {% if current_user.is_authenticated %}
       <li>{{ current_user }}</li>
-      <li>登出</li>
+      <li>
+        <form action="{{ url_for("user.logout") }}" method="POST">
+          <button class="hover:underline">登出</button>
+        </form>
+      </li>
     {% else %}
       <li><a href="{{ url_for("user.new") }}" class="hover:underline">註冊</a></li>
       <li><a href="{{ url_for("user.login") }}" class="hover:underline">登入</a></li>

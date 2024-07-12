@@ -4,7 +4,7 @@ from models.user import User
 from config.settings import db
 from flask_bcrypt import Bcrypt
 from apps import app
-from flask_login import login_user
+from flask_login import login_user, logout_user
 
 user_bp = Blueprint("user", __name__)
 bcrypt = Bcrypt(app)
@@ -28,6 +28,13 @@ def login():
         else:
             flash("登入失敗，請確認後再重試一次")
     return render_template("users/login.html.jinja", form=form)
+
+
+@user_bp.route("/logout", methods=["POST"])
+def logout():
+    logout_user()
+    flash("已登出！")
+    return redirect(url_for("root"))
 
 
 @user_bp.route("/create", methods=["POST"])
