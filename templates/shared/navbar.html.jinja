@@ -4,8 +4,12 @@
     <li><a href="{{ url_for("post.new") }}" class="hover:underline">新增文章</a></li>
   </ul>
   <ul class="flex gap-4">
-    <li><a href="{{ url_for("user.new") }}" class="hover:underline">註冊</a></li>
-    <li><a href="{{ url_for("user.login") }}" class="hover:underline">登入</a></li>
-    <li></li>
+    {% if current_user.is_authenticated %}
+      <li>{{ current_user }}</li>
+      <li>登出</li>
+    {% else %}
+      <li><a href="{{ url_for("user.new") }}" class="hover:underline">註冊</a></li>
+      <li><a href="{{ url_for("user.login") }}" class="hover:underline">登入</a></li>
+    {% endif %}
   </ul>
 </nav>

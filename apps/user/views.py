@@ -4,6 +4,7 @@ from models.user import User
 from config.settings import db
 from flask_bcrypt import Bcrypt
 from apps import app
+from flask_login import login_user
 
 user_bp = Blueprint("user", __name__)
 bcrypt = Bcrypt(app)
@@ -21,6 +22,7 @@ def login():
     if request.method == "POST" and form.validate():
         user = User.query.filter_by(username=form.username.data).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
+            login_user(user)
             flash("登入成功")
             return redirect(url_for("root"))
         else:
