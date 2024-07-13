@@ -1,16 +1,11 @@
 {% extends "layout.html.jinja" %}
+{% from "helpers/form_field.html.jinja" import render_field %}
 
 {% block content %}
   <h1 class="text-2xl mb-2">更新文章</h1>
   <form action="{{ url_for("post.update", id=post.id) }}" method="POST" class="flex flex-col gap-4">
-    <div class="flex flex-col gap-2">
-      <label for="title">標題</label>
-      <input type="text" id="title" name="title" class="text-xl w-full md:w-1/2 p-2 border border-gray-900 rounded-sm" placeholder="請填寫標題" value="{{ post.title }}" />
-    </div>
-    <div class="flex flex-col gap-2">
-      <label for="content">內文</label>
-      <textarea id="content" name="content" class="text-xl w-full md:w-1/2 p-2 border border-gray-900 rounded-sm" placeholder="文章內容" rows="6">{{ post.content }}</textarea>
-    </div>
+    {{ render_field(form.title) }}
+    {{ render_field(form.content, rows=6) }}
     <div>
       <button type="submit" class="text-lg bg-blue-500 text-white p-2 rounded-sm">更新文章</button>
     </div>

@@ -2,6 +2,7 @@ from config.settings import db
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from models import Post
 from flask_login import login_required, current_user
+from .forms import PostForm
 
 post_bp = Blueprint("post", __name__)
 
@@ -21,44 +22,52 @@ def show(id):
 @post_bp.route("/new")
 @login_required
 def new():
-    return render_template("posts/new.html.jinja")
+    form = PostForm()
+    return render_template("posts/new.html.jinja", form=form)
 
 
 @post_bp.route("/create", methods=["POST"])
 @login_required
 def create():
-    title = request.form.get("title")
-    content = request.form.get("content")
+    form = PostForm(request.form)
 
-    post = Post(title=title, content=content)
-    post.author = current_user
-    db.session.add(post)
-    db.session.commit()
+    if form.validate():
+        title = form.title.data
+        content = form.content.data
 
-    flash("新增文章成功！")
+        post = Post(title=title, content=content)
+        post.author = current_user
+        db.session.add(post)
+        db.session.commit()
 
-    return redirect(url_for("post.index"))
+        flash("新增文章成功！")
+        return redirect(url_for("post.index"))
+
+    return render_template("posts/new.html.jinja", form=form)
 
 
 @post_bp.route("/<int:id>/edit")
 @login_required
 def edit(id):
     post = Post.query.filter_by(id=id, author=current_user).first_or_404()
-    return render_template("posts/edit.html.jinja", post=post)
+    form = PostForm(obj=post)
+    return render_template("posts/edit.html.jinja", post=post, form=form)
 
 
 @post_bp.route("/<int:id>/update", methods=["POST"])
 @login_required
 def update(id):
     post = Post.query.filter_by(id=id, author=current_user).first_or_404()
+    form = PostForm(request.form, obj=post)
 
-    post.title = request.form.get("title")
-    post.content = request.form.get("content")
+    if form.validate():
+        form.populate_obj(post)
+        db.session.commit()
 
-    db.session.commit()
+        flash("文章更新成功！")
+        return redirect(url_for("post.show", id=id))
 
-    flash("文章更新成功！")
-    return redirect(url_for("post.show", id=id))
+    return render_template("posts/edit.html.jinja", post=post, form=form)
 
 
 @post_bp.route("/<int:id>/delete", methods=["POST"])
