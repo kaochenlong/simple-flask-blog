@@ -1,7 +1,7 @@
 from config.settings import db
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from models import Post
-from flask_login import login_required
+from flask_login import login_required, current_user
 
 post_bp = Blueprint("post", __name__)
 
@@ -31,6 +31,7 @@ def create():
     content = request.form.get("content")
 
     post = Post(title=title, content=content)
+    post.author = current_user
     db.session.add(post)
     db.session.commit()
 
@@ -42,14 +43,14 @@ def create():
 @post_bp.route("/<int:id>/edit")
 @login_required
 def edit(id):
-    post = Post.query.get_or_404(id)
+    post = Post.query.filter_by(id=id, author=current_user).first_or_404()
     return render_template("posts/edit.html.jinja", post=post)
 
 
 @post_bp.route("/<int:id>/update", methods=["POST"])
 @login_required
 def update(id):
-    post = Post.query.get_or_404(id)
+    post = Post.query.filter_by(id=id, author=current_user).first_or_404()
 
     post.title = request.form.get("title")
     post.content = request.form.get("content")
@@ -63,7 +64,7 @@ def update(id):
 @post_bp.route("/<int:id>/delete", methods=["POST"])
 @login_required
 def delete(id):
-    post = Post.query.get_or_404(id)
+    post = Post.query.filter_by(id=id, author=current_user).first_or_404()
 
     db.session.delete(post)
     db.session.commit()
